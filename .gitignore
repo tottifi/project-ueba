@@ -1,2 +1,8 @@
 LOGS/
 CSV/
+OUT_LOGS/
+
+scripts/analysis/__pycache__
+scripts/parser/__pycache__
+
+.idea
