@@ -109,7 +109,7 @@ class ScoringDestination:
                         'score': 0
                     })
                     if self.show_errors:
-                        results['errors'] = []
+                        results[-1]['errors'] = []
 
                 no_zero_sd = log_sd if log_sd != 0 else 0.1
                 results[-1]['score'] += (abs(hour_log[4] - log_mean) - log_sd) / no_zero_sd

@@ -16,8 +16,8 @@ standard_deviation_filter.start(frequency_connection_hour_get_array())
 scoring_destination_filter = ScoringDestination({
     'file_log_out':'OUT_LOGS/scoring_destination_logs.txt',
     'coefficent_sd': 3,
-    'floor_values': True,
-    'show_errors': False
+    'floor_values': False,
+    'show_errors': True
 })
 
 scoring_destination_filter.start(profiling_ip_destination_get_array())
