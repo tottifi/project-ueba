@@ -1,17 +1,21 @@
 import sys
 import re
 
-from scripts.parser.logs_to_csv import logs_to_csv
+"""
+Create a csv for Profiling IP Destination from an all logs CSV
 
-
-def profiling_ip_destination_to_csv():
+@param {String} logs_csv_path: Path to the csv file containing every logs
+@param {String} profiling_csv_out_path: Path for the output csv
+"""
+def profiling_ip_destination_to_csv(logs_csv_path, profiling_csv_out_path):
     try:
-        f = open('CSV/all_logs.csv')
+        f = open(logs_csv_path)
         f.close()
     except FileNotFoundError:
-        logs_to_csv()
+        print("ERROR: No Full Logs CSV File Found")
+        return
 
-    print("GENERATING PROFILING IP DESTINATION CSV")
+    print("INFO: Generating Profiling IP Destination CSV File")
 
     difference = 3600
 
@@ -22,7 +26,7 @@ def profiling_ip_destination_to_csv():
     last_time_range = -1
     last_day_checked = -1
 
-    f = open('CSV/all_logs.csv', "r")
+    f = open(logs_csv_path, "r")
     # Skip Header CSV
     f.readline()
 
@@ -59,9 +63,9 @@ def profiling_ip_destination_to_csv():
 
     f.close()
 
-    print("INFO: Creating CSV File")
+    print("INFO: Creating Profiling IP Destination CSV File")
 
-    fout = open('CSV/profiling_ip_destination.csv', "w")
+    fout = open(profiling_csv_out_path, "w")
 
     fout.write('hour,ip_dest,port_dest,protocol,number_connections\n')
 
@@ -81,7 +85,15 @@ def profiling_ip_destination_to_csv():
 
     fout.close()
 
+    print("INFO: Profiling IP Destination CSV File DONE")
+
+
 """
+Create a csv for Profiling IP Destination from a premade CSV file
+
+@param {String} profiling_csv_path: Path for the Profiling IP Destination CSV File
+
+@returns:
     [
         [
             <int> Hour,
@@ -93,16 +105,17 @@ def profiling_ip_destination_to_csv():
         ...
     ]
 """
-def profiling_ip_destination_get_array():
+def profiling_ip_destination_get_array(profiling_csv_path):
     try:
-        f = open('CSV/profiling_ip_destination.csv')
+        f = open(profiling_csv_path)
         f.close()
     except FileNotFoundError:
-        profiling_ip_destination_to_csv()
+        print("ERROR: No Profiling IP Destination CSV File Found")
+        return []
 
     logs_array = []
 
-    f = open('CSV/profiling_ip_destination.csv', "r")
+    f = open(profiling_csv_path, "r")
     # Skip Header CSV
     f.readline()
 

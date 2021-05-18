@@ -3,17 +3,21 @@ import re
 
 from scripts.parser.logs_to_csv import logs_to_csv
 
+"""
+Create a csv for Profiling IP Destination from an all logs CSV
 
-def frequency_connection_hour_to_csv():
+@param {String} logs_csv_path: Path to the csv file containing every logs
+@param {String} frequency_connection_csv_out_path: Path for the output csv
+"""
+def frequency_connection_hour_to_csv(logs_csv_path, frequency_connection_csv_out_path):
     try:
-        f = open('CSV/all_logs.csv')
+        f = open(logs_csv_path)
         f.close()
     except FileNotFoundError:
-        logs_to_csv()
+        print("ERROR: No Full Logs CSV File Found")
+        return
 
-    print("GENERATING FREQUENCY CONNECTION BY HOUR CSV")
-
-    print("INFO: Calculating Frequency")
+    print("INFO: Generating Frequency Connection By Hour CSV File")
 
     difference = 3600
 
@@ -23,7 +27,7 @@ def frequency_connection_hour_to_csv():
     last_time_range = -1
     last_day_checked = -1
 
-    f = open('CSV/all_logs.csv', "r")
+    f = open(logs_csv_path, "r")
     # Skip Header CSV
     f.readline()
 
@@ -53,20 +57,19 @@ def frequency_connection_hour_to_csv():
 
     f.close()
 
-    print("INFO: Creating CSV File")
+    print("INFO: Creating Frequency Connection By Hour CSV File")
 
-    fout = open('CSV/frequency_connection_hour.csv', "w")
+    fout = open(frequency_connection_csv_out_path, "w")
 
     fout.write('ip')
     for i in range(0, len(all_ip_by_times)):
         fout.write(',hour' + str(i))
     fout.write('\n')
 
-    # Uniquement Print
-    print("Total d'ip: " + str(len(all_ip)))
+    # Print
+    print("IPs to check: " + str(len(all_ip)))
     print_index = 0
     print_index2 = 0
-    # Fin Uniquement Print
 
     for ip in all_ip:
         fout.write(ip)
@@ -84,17 +87,36 @@ def frequency_connection_hour_to_csv():
 
     fout.close()
 
+    print("INFO: Frequency Connection By Hour CSV File DONE")
 
-def frequency_connection_hour_get_array():
+"""
+Create a csv for Frequency Connection By Hour from a premade CSV file
+
+@param {String} frequency_connection_csv_path: Path for the Frequency Connection By Hour CSV File
+
+@returns:
+    [
+        [
+            <string> IP, 
+            <int> Total connections on time range 0, 
+            <int> Total connections on time range 1, 
+            ...
+            <int> Total connections on time range MAX
+        ], 
+    ...
+    ]
+"""
+def frequency_connection_hour_get_array(frequency_connection_csv_path):
     try:
-        f = open('CSV/frequency_connection_hour.csv')
+        f = open(frequency_connection_csv_path)
         f.close()
     except FileNotFoundError:
-        frequency_connection_hour_to_csv()
+        print("ERROR: No Frequency Connection By Hour CSV File Found")
+        return []
 
     logs_array = []
 
-    f = open('CSV/frequency_connection_hour.csv', "r")
+    f = open(frequency_connection_csv_path, "r")
     # Skip Header CSV
     f.readline()
 

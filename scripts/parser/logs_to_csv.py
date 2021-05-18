@@ -1,23 +1,27 @@
 import re
 
+"""
+Create a csv from every logs given their paths
 
-def logs_to_csv():
+@param {String[]} logs_paths: Array with all differents logs paths to concat into one single csv
+@param {String} csv_out_path: Path for the output csv
+"""
+def logs_to_csv(logs_paths, csv_out_path):
     print("GENERATING FULL LOGS CSV")
 
     regex = r'([0-9]{2})\:([0-9]{2})\:([0-9]{2})\.([0-9]{6}) IP ((?:25[0-5]\.|2[0-4][0-9]\.|[0-1]?[0-9]{1,' \
             r'2}\.){3}(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))\.([0-9]{1,9}) \> ((?:25[0-5]\.|2[0-4][0-9]\.|[0-1]?[' \
             r'0-9]{1,2}\.){3}(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))\.([0-9]{1,9})\:.+(ICMP|UDP|Flags)'
 
-    fout = open('CSV/all_logs.csv', "w")
+    fout = open(csv_out_path, "w")
     fout.write('day,hours,minutes,seconds,microseconds,ip_source,port_source,ip_dest,port_dest,protocol\n')
 
     day = 0
     precedent_hour = 0
 
-    for i in range(0, 30):
-        filename = 'pflog.' + str(i) + '.bz2.log'
-        f = open('LOGS/' + filename)
-        print('INFO: Read file ' + filename)
+    for log_path in logs_paths:
+        f = open(log_path)
+        print('INFO: Read file ' + log_path)
 
         for line in f:
             regex_results = re.search(regex, line)
