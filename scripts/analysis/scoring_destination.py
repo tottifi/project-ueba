@@ -25,6 +25,10 @@ class ScoringDestination:
         if 'floor_values' in options:
             self.floor_values = options['floor_values']
 
+        self.zero_errors = False
+        if 'zero_errors' in options:
+            self.zero_errors = options['zero_errors']
+
         self.show_errors = True
         if 'show_errors' in options:
             self.show_errors = options['show_errors']
@@ -90,8 +94,15 @@ class ScoringDestination:
         last_hour = -1
         results = []
         for hour_log in logs:
-            if last_hour != hour_log[0]:
-                last_hour = hour_log[0]
+            while last_hour < hour_log[0]:
+                last_hour += 1
+                if last_hour == hour_log[0] or self.zero_errors:
+                    results.append({
+                        'hour': last_hour,
+                        'score': 0
+                    })
+                    if self.show_errors:
+                        results[-1]['errors'] = []
 
             log_sd = trained[hour_log[1]][hour_log[2]][hour_log[3]]['sd']
             log_mean = trained[hour_log[1]][hour_log[2]][hour_log[3]]['mean']
@@ -102,17 +113,9 @@ class ScoringDestination:
             elif hour_log[4] < log_mean and hour_log[4] < log_mean - self.coefficent_standard_deviation * log_sd:
                 is_error = True
 
-            if is_error:                
-                if len(results) == 0 or results[-1]['hour'] != last_hour:
-                    results.append({
-                        'hour': last_hour,
-                        'score': 0
-                    })
-                    if self.show_errors:
-                        results[-1]['errors'] = []
-
-                no_zero_sd = log_sd if log_sd != 0 else 0.1
-                results[-1]['score'] += (abs(hour_log[4] - log_mean) - log_sd) / no_zero_sd
+            if is_error:
+                no_zero_sd = self.coefficent_standard_deviation * log_sd if log_sd != 0 else 0.1
+                results[-1]['score'] += (abs(hour_log[4] - log_mean) - self.coefficent_standard_deviation * log_sd) / no_zero_sd
 
                 if self.show_errors:
                     warning = {
