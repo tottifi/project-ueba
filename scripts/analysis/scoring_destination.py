@@ -13,6 +13,10 @@ import math
 class ScoringDestination:
 
     def __init__(self, options):
+        self.silent = False
+        if 'silent' in options:
+            self.silent = options['silent']
+
         self.file_log_out = None
         if 'file_log_out' in options:
             self.file_log_out = options['file_log_out']
@@ -48,7 +52,8 @@ class ScoringDestination:
     ]
     """
     def start(self, logs):
-        print('INFO: Calculating Standard Deviations...')
+        if not self.silent:
+            print('INFO: Calculating Standard Deviations...')
         trained = {}
 
         total_hours = 0
@@ -90,7 +95,8 @@ class ScoringDestination:
                     
                     trained[ip_dest][port_dest][protocol]['sd'] = sd
 
-        print('INFO: Calculating scores and errors...')
+        if not self.silent:
+            print('INFO: Calculating scores and errors...')
         last_hour = -1
         results = []
         for hour_log in logs:
@@ -138,7 +144,8 @@ class ScoringDestination:
                 element['score'] = math.floor(element['score'])
 
         if self.file_log_out:
-            print("INFO: Logging data...")
+            if not self.silent:
+                print("INFO: Logging data...")
             f = open(self.file_log_out, 'w')
             f.write(json.dumps(results))
             f.close()

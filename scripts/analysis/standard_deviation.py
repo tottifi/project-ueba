@@ -5,6 +5,10 @@ import math
 class StandardDeviation:
 
     def __init__(self, options):
+        self.silent = False
+        if 'silent' in options:
+            self.silent = options['silent']
+
         self.file_log_out = None
         if 'file_log_out' in options:
             self.file_log_out = options['file_log_out']
@@ -31,7 +35,8 @@ class StandardDeviation:
     ]
     """
     def start(self, logs):
-        print('INFO: Starting Standard Deviation Analysis')
+        if not self.silent:
+            print('INFO: Starting Standard Deviation Analysis')
 
         results = []
 
@@ -84,7 +89,8 @@ class StandardDeviation:
                 results.append(warning_ip)
 
         if self.file_log_out:
-            print("INFO: Logging data...")
+            if not self.silent:
+                print("INFO: Logging data...")
             f = open(self.file_log_out, 'w')
             f.write(json.dumps(results))
             f.close()

@@ -20,15 +20,18 @@ profiling_ip_destination_to_csv('CSV/all_logs.csv', 'CSV/profiling_ip_destinatio
 
 """
 standard_deviation_filter = StandardDeviation({
-    'file_log_out':'OUT_LOGS/standard_deviation_logs.txt',
-    'coefficent_sd': 3
+    'silent': False,
+    'file_log_out': 'OUT_LOGS/standard_deviation_logs.txt',
+    'coefficent_sd': 3,
+    'skip_zero': True
 })
 
 standard_deviation_filter.start(frequency_connection_hour_get_array('CSV/frequency_connection_hour.csv'))
 """
 
 scoring_destination_filter = ScoringDestination({
-    'file_log_out':'OUT_LOGS/scoring_destination_logs.txt',
+    'silent': False,
+    'file_log_out': 'OUT_LOGS/scoring_destination_logs.txt',
     'coefficent_sd': 3,
     'floor_values': False,
     'show_errors': True,
