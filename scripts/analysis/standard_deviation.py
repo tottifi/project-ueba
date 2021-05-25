@@ -17,6 +17,10 @@ class StandardDeviation:
         if 'coefficent_sd' in options:
             self.coefficent_standard_deviation = int(options['coefficent_sd'])
 
+        self.floor_values = False
+        if 'floor_values' in options:
+            self.floor_values = options['floor_values']
+
         self.skip_zero = True
         if 'skip_zero' in options:
             self.skip_zero = True if options['skip_zero'] else False
@@ -60,10 +64,15 @@ class StandardDeviation:
 
             warning_ip = {
                 'ip': ip_array[0],
-                'mean': math.floor(mean),
-                'standard_deviation': math.floor(standard_deviation),
+                'mean': mean,
+                'sd': standard_deviation,
                 'warnings': []
             }
+
+            if self.floor_values:
+                warning_ip['mean'] = math.floor(mean)
+                warning_ip['sd'] = math.floor(standard_deviation)
+
             for i in range(1, len(ip_array)):
                 if self.skip_zero and ip_array[i] == 0:
                     continue
