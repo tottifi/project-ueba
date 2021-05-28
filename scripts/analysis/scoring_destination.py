@@ -121,7 +121,7 @@ class ScoringDestination:
 
             if is_error:
                 no_zero_sd = self.coefficent_standard_deviation * log_sd if log_sd != 0 else 0.1
-                results[-1]['score'] += (abs(hour_log[4] - log_mean) - self.coefficent_standard_deviation * log_sd) / no_zero_sd
+                results[-1]['score'] += 1 #(abs(hour_log[4] - log_mean) - self.coefficent_standard_deviation * log_sd) / no_zero_sd
 
                 if self.show_errors:
                     warning = {

@@ -4,7 +4,7 @@ import re
 from scripts.parser.logs_to_csv import logs_to_csv
 
 """
-Create a csv for Profiling IP Destination from an all logs CSV
+Create a csv for Frequency Connection By Hour from an all logs CSV
 
 @param {String} logs_csv_path: Path to the csv file containing every logs
 @param {String} frequency_connection_csv_out_path: Path for the output csv
